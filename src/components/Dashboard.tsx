@@ -107,7 +107,7 @@ export default function Dashboard() {
 
         {/* DETAILS */}
         {tab === "details" && (
-          <DetailsTab expenses={expenses} accounts={accounts} />
+          <DetailsTab expenses={expenses} accounts={accounts} onEdit={setEditingExpense} />
         )}
 
         {/* ACCOUNTS */}

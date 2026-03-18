@@ -2,18 +2,18 @@
 
 import { useState, useMemo } from "react";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, getDay } from "date-fns";
-import { Expense, CATEGORIES, INCOME_CATEGORIES, deleteExpense } from "@/lib/expenses";
+import { Expense, CATEGORIES, INCOME_CATEGORIES } from "@/lib/expenses";
 import { Account, getAccountTypeInfo } from "@/lib/accounts";
 
 interface Props {
   expenses: Expense[];
   accounts: Account[];
+  onEdit?: (expense: Expense) => void;
 }
 
-export default function DetailsTab({ expenses, accounts }: Props) {
+export default function DetailsTab({ expenses, accounts, onEdit }: Props) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(currentMonth);
@@ -42,15 +42,6 @@ export default function DetailsTab({ expenses, accounts }: Props) {
     if (!selectedDate) return [];
     return expenses.filter((e) => isSameDay(e.date, selectedDate));
   }, [expenses, selectedDate]);
-
-  const handleDelete = async (id: string) => {
-    setDeletingId(id);
-    try {
-      await deleteExpense(id);
-    } finally {
-      setDeletingId(null);
-    }
-  };
 
   const allCategories = [...CATEGORIES, ...INCOME_CATEGORIES];
   const getCategoryInfo = (name: string) =>
@@ -162,7 +153,8 @@ export default function DetailsTab({ expenses, accounts }: Props) {
               return (
                 <div
                   key={expense.id}
-                  className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-zinc-200 dark:hover:border-zinc-700 transition-colors group"
+                  onClick={() => onEdit?.(expense)}
+                  className={`flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-zinc-200 dark:hover:border-zinc-700 transition-colors ${onEdit ? "cursor-pointer active:scale-[0.98] active:bg-zinc-50 dark:active:bg-zinc-800" : ""}`}
                 >
                   <div
                     className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
@@ -191,13 +183,11 @@ export default function DetailsTab({ expenses, accounts }: Props) {
                     }`}>
                       {expense.type === "income" ? "+" : "-"}${expense.amount.toFixed(2)}
                     </p>
-                    <button
-                      onClick={() => handleDelete(expense.id)}
-                      disabled={deletingId === expense.id}
-                      className="opacity-0 group-hover:opacity-100 text-zinc-300 hover:text-red-500 dark:text-zinc-600 dark:hover:text-red-400 transition-all text-lg leading-none"
-                    >
-                      &times;
-                    </button>
+                    {onEdit && (
+                      <svg className="w-4 h-4 text-zinc-300 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                      </svg>
+                    )}
                   </div>
                 </div>
               );
@@ -226,7 +216,8 @@ export default function DetailsTab({ expenses, accounts }: Props) {
                 return (
                   <div
                     key={expense.id}
-                    className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-zinc-200 dark:hover:border-zinc-700 transition-colors group"
+                    onClick={() => onEdit?.(expense)}
+                    className={`flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-zinc-200 dark:hover:border-zinc-700 transition-colors ${onEdit ? "cursor-pointer active:scale-[0.98] active:bg-zinc-50 dark:active:bg-zinc-800" : ""}`}
                   >
                     <div
                       className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
@@ -248,16 +239,18 @@ export default function DetailsTab({ expenses, accounts }: Props) {
                       </p>
                     </div>
                     <div className="text-right flex items-center gap-2">
-                      <p className="font-semibold text-zinc-900 dark:text-white text-sm">
-                        ${expense.amount.toFixed(2)}
+                      <p className={`font-semibold text-sm ${
+                        expense.type === "income"
+                          ? "text-green-600 dark:text-green-400"
+                          : "text-zinc-900 dark:text-white"
+                      }`}>
+                        {expense.type === "income" ? "+" : "-"}${expense.amount.toFixed(2)}
                       </p>
-                      <button
-                        onClick={() => handleDelete(expense.id)}
-                        disabled={deletingId === expense.id}
-                        className="opacity-0 group-hover:opacity-100 text-zinc-300 hover:text-red-500 dark:text-zinc-600 dark:hover:text-red-400 transition-all text-lg leading-none"
-                      >
-                        &times;
-                      </button>
+                      {onEdit && (
+                        <svg className="w-4 h-4 text-zinc-300 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                        </svg>
+                      )}
                     </div>
                   </div>
                 );
