@@ -30,22 +30,22 @@ export default function Summary({ expenses, showIncome }: Props) {
         {showIncome ? (
           <>
             <p className="text-sm font-medium text-zinc-400">Balance</p>
-            <p className="text-3xl font-bold mt-1">${(totalIncome - totalExpense).toFixed(2)}</p>
+            <p className="text-3xl font-bold mt-1">{(totalIncome - totalExpense).toFixed(2)}</p>
             <div className="flex gap-4 mt-3">
               <div>
                 <p className="text-[10px] text-zinc-500 uppercase tracking-wider">Income</p>
-                <p className="text-sm font-semibold text-emerald-400">${totalIncome.toFixed(2)}</p>
+                <p className="text-sm font-semibold text-emerald-400">{totalIncome.toFixed(2)}</p>
               </div>
               <div>
                 <p className="text-[10px] text-zinc-500 uppercase tracking-wider">Expenses</p>
-                <p className="text-sm font-semibold text-rose-400">${totalExpense.toFixed(2)}</p>
+                <p className="text-sm font-semibold text-rose-400">{totalExpense.toFixed(2)}</p>
               </div>
             </div>
           </>
         ) : (
           <>
             <p className="text-sm font-medium text-zinc-400">Total Expenses</p>
-            <p className="text-3xl font-bold mt-1 bg-gradient-to-r from-white via-zinc-100 to-zinc-300 bg-clip-text text-transparent">${totalExpense.toFixed(2)}</p>
+            <p className="text-3xl font-bold mt-1 bg-gradient-to-r from-white via-zinc-100 to-zinc-300 bg-clip-text text-transparent">{totalExpense.toFixed(2)}</p>
             <p className="text-xs text-zinc-500 mt-1">
               {expenseCount} transaction{expenseCount !== 1 ? "s" : ""}
             </p>

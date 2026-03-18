@@ -78,7 +78,7 @@ export default function ExpenseList({ expenses, accounts, onEdit }: Props) {
                         ? "text-green-600 dark:text-green-400"
                         : "text-zinc-900 dark:text-white"
                     }`}>
-                      {expense.type === "income" ? "+" : "-"}${expense.amount.toFixed(2)}
+                      {expense.type === "income" ? "+" : "-"}{expense.amount.toFixed(2)}
                     </p>
                     {onEdit && (
                       <svg className="w-4 h-4 text-zinc-300 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

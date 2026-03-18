@@ -64,7 +64,7 @@ export default function DetailsTab({ expenses, accounts, onEdit }: Props) {
             {format(currentMonth, "MMMM yyyy")}
           </p>
           <p className="text-xs text-zinc-400 dark:text-zinc-500">
-            ${monthTotal.toFixed(2)} spent
+            {monthTotal.toFixed(2)} spent
           </p>
         </div>
         <button
@@ -120,7 +120,7 @@ export default function DetailsTab({ expenses, accounts, onEdit }: Props) {
                       isSelected ? "text-violet-200" : "text-violet-500 dark:text-violet-400"
                     }`}
                   >
-                    ${total < 1000 ? total.toFixed(0) : (total / 1000).toFixed(1) + "k"}
+                    {total < 1000 ? total.toFixed(0) : (total / 1000).toFixed(1) + "k"}
                   </span>
                 )}
                 {!hasExpenses && <span className="text-[8px] mt-0.5 invisible">0</span>}
@@ -137,7 +137,7 @@ export default function DetailsTab({ expenses, accounts, onEdit }: Props) {
             {format(selectedDate, "EEEE, MMM d")}
             {selectedExpenses.length > 0 && (
               <span className="ml-2 normal-case">
-                — ${selectedExpenses.reduce((s, e) => s + e.amount, 0).toFixed(2)}
+                — {selectedExpenses.reduce((s, e) => s + e.amount, 0).toFixed(2)}
               </span>
             )}
           </p>
@@ -181,7 +181,7 @@ export default function DetailsTab({ expenses, accounts, onEdit }: Props) {
                         ? "text-green-600 dark:text-green-400"
                         : "text-zinc-900 dark:text-white"
                     }`}>
-                      {expense.type === "income" ? "+" : "-"}${expense.amount.toFixed(2)}
+                      {expense.type === "income" ? "+" : "-"}{expense.amount.toFixed(2)}
                     </p>
                     {onEdit && (
                       <svg className="w-4 h-4 text-zinc-300 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -244,7 +244,7 @@ export default function DetailsTab({ expenses, accounts, onEdit }: Props) {
                           ? "text-green-600 dark:text-green-400"
                           : "text-zinc-900 dark:text-white"
                       }`}>
-                        {expense.type === "income" ? "+" : "-"}${expense.amount.toFixed(2)}
+                        {expense.type === "income" ? "+" : "-"}{expense.amount.toFixed(2)}
                       </p>
                       {onEdit && (
                         <svg className="w-4 h-4 text-zinc-300 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

@@ -95,7 +95,7 @@ export default function Dashboard() {
             <div className="bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl p-6 text-white shadow-lg shadow-green-500/20">
               <p className="text-sm font-medium text-green-200">Total Income</p>
               <p className="text-3xl font-bold mt-1">
-                ${incomeEntries.reduce((s, e) => s + e.amount, 0).toFixed(2)}
+                {incomeEntries.reduce((s, e) => s + e.amount, 0).toFixed(2)}
               </p>
               <p className="text-xs text-green-200 mt-1">
                 {incomeEntries.length} transaction{incomeEntries.length !== 1 ? "s" : ""}
@@ -177,7 +177,7 @@ export default function Dashboard() {
                     <div className="text-right flex items-center gap-2">
                       <div>
                         <p className="text-sm font-semibold text-zinc-900 dark:text-white">
-                          ${accTotal.toFixed(2)}
+                          {accTotal.toFixed(2)}
                         </p>
                         <p className="text-[10px] text-zinc-400">
                           {accExpenses.length} txn{accExpenses.length !== 1 ? "s" : ""}
