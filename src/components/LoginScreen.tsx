@@ -60,8 +60,8 @@ export default function LoginScreen() {
       <div className="w-full max-w-sm space-y-6">
         {/* Logo */}
         <div className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-violet-500/20">
-            <span className="text-2xl text-white font-bold">S</span>
+          <div className="w-16 h-16 bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-zinc-900/40">
+            <span className="text-3xl font-bold bg-gradient-to-br from-fuchsia-300 via-cyan-300 to-amber-300 bg-clip-text text-transparent">$</span>
           </div>
           <h1 className="text-2xl font-bold text-zinc-900 dark:text-white mt-6">
             Sab Expense
