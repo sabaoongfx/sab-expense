@@ -2,6 +2,7 @@ import {
   collection,
   addDoc,
   deleteDoc,
+  updateDoc,
   doc,
   query,
   where,
@@ -51,6 +52,13 @@ export async function addExpense(
     date: Timestamp.fromDate(data.date),
     createdAt: Timestamp.now(),
   });
+}
+
+export async function updateExpense(
+  id: string,
+  data: { title: string; amount: number; category: string; accountId: string }
+) {
+  await updateDoc(doc(db, "expenses", id), data);
 }
 
 export async function deleteExpense(id: string) {

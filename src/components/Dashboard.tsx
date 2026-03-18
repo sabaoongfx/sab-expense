@@ -10,6 +10,7 @@ import ExpenseList from "./ExpenseList";
 import AddExpenseModal from "./AddExpenseModal";
 import AddIncomeModal from "./AddIncomeModal";
 import AddAccountModal from "./AddAccountModal";
+import EditExpenseModal from "./EditExpenseModal";
 import DetailsTab from "./DetailsTab";
 
 type Tab = "home" | "accounts" | "details" | "income" | "settings";
@@ -22,6 +23,7 @@ export default function Dashboard() {
   const [showAdd, setShowAdd] = useState(false);
   const [showAddIncome, setShowAddIncome] = useState(false);
   const [showAddAccount, setShowAddAccount] = useState(false);
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [tab, setTab] = useState<Tab>("home");
   const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null);
 
@@ -83,7 +85,7 @@ export default function Dashboard() {
         {tab === "home" && (
           <>
             <Summary expenses={expenses} showIncome={settings.showIncome && hasIncome} />
-            <ExpenseList expenses={expenseEntries} accounts={accounts} />
+            <ExpenseList expenses={expenseEntries} accounts={accounts} onEdit={setEditingExpense} />
           </>
         )}
 
@@ -99,7 +101,7 @@ export default function Dashboard() {
                 {incomeEntries.length} transaction{incomeEntries.length !== 1 ? "s" : ""}
               </p>
             </div>
-            <ExpenseList expenses={incomeEntries} accounts={accounts} />
+            <ExpenseList expenses={incomeEntries} accounts={accounts} onEdit={setEditingExpense} />
           </>
         )}
 
@@ -376,6 +378,13 @@ export default function Dashboard() {
       <AddExpenseModal open={showAdd} onClose={() => setShowAdd(false)} accounts={accounts} />
       <AddIncomeModal open={showAddIncome} onClose={() => setShowAddIncome(false)} accounts={accounts} />
       <AddAccountModal open={showAddAccount} onClose={() => setShowAddAccount(false)} />
+      {editingExpense && (
+        <EditExpenseModal
+          expense={editingExpense}
+          accounts={accounts}
+          onClose={() => setEditingExpense(null)}
+        />
+      )}
     </div>
   );
 }
