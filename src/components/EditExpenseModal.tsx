@@ -51,11 +51,9 @@ export default function EditExpenseModal({ expense, accounts, onClose }: Props) 
     }
   };
 
-  const activeAccClass = isIncome
+  const activeClass = isIncome
     ? "border-green-500 bg-green-50 dark:bg-green-500/10 text-green-700 dark:text-green-300 ring-1 ring-green-500"
     : "border-violet-500 bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-300 ring-1 ring-violet-500";
-
-  const activeCatClass = activeAccClass;
 
   const ringClass = isIncome ? "focus:ring-green-500" : "focus:ring-violet-500";
 
@@ -118,7 +116,7 @@ export default function EditExpenseModal({ expense, accounts, onClose }: Props) 
                     onClick={() => setAccountId(acc.id)}
                     className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-medium transition-all whitespace-nowrap shrink-0 ${
                       accountId === acc.id
-                        ? activeAccClass
+                        ? activeClass
                         : "border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600"
                     }`}
                   >
@@ -142,7 +140,7 @@ export default function EditExpenseModal({ expense, accounts, onClose }: Props) 
                   onClick={() => setCategory(cat.name)}
                   className={`flex items-center gap-1 py-1.5 px-2.5 rounded-lg border text-xs font-medium transition-all ${
                     category === cat.name
-                      ? activeCatClass
+                      ? activeClass
                       : "border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600"
                   }`}
                 >

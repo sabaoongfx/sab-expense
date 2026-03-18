@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { Expense, CATEGORIES, INCOME_CATEGORIES } from "@/lib/expenses";
+import { Expense, getCategoryInfo } from "@/lib/expenses";
 import { Account, getAccountTypeInfo } from "@/lib/accounts";
 
 interface Props {
@@ -11,10 +11,6 @@ interface Props {
 }
 
 export default function ExpenseList({ expenses, accounts, onEdit }: Props) {
-  const allCategories = [...CATEGORIES, ...INCOME_CATEGORIES];
-  const getCategoryInfo = (name: string) =>
-    allCategories.find((c) => c.name === name) || CATEGORIES[CATEGORIES.length - 1];
-
   if (expenses.length === 0) {
     return (
       <div className="text-center py-16 text-zinc-400 dark:text-zinc-500">
@@ -46,7 +42,9 @@ export default function ExpenseList({ expenses, accounts, onEdit }: Props) {
                 <div
                   key={expense.id}
                   onClick={() => onEdit?.(expense)}
-                  className={`flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-zinc-200 dark:hover:border-zinc-700 transition-colors ${onEdit ? "cursor-pointer active:scale-[0.98] active:bg-zinc-50 dark:active:bg-zinc-800" : ""}`}
+                  tabIndex={onEdit ? 0 : undefined}
+                  role={onEdit ? "button" : undefined}
+                  className={`flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-zinc-200 dark:hover:border-zinc-700 transition-colors ${onEdit ? "cursor-pointer active:scale-[0.98] active:bg-zinc-50 dark:active:bg-zinc-800 focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none" : ""}`}
                 >
                   <div
                     className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"

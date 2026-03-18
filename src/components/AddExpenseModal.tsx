@@ -22,11 +22,9 @@ export default function AddExpenseModal({ open, onClose, accounts }: Props) {
 
   if (!open) return null;
 
-  const selectedAccountId = accountId || defaultAccount?.id || "";
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !title || !amount || !selectedAccountId) return;
+    if (!user || !title || !amount || !accountId) return;
 
     setLoading(true);
     try {
@@ -35,7 +33,7 @@ export default function AddExpenseModal({ open, onClose, accounts }: Props) {
         amount: parseFloat(amount),
         type: "expense",
         category,
-        accountId: selectedAccountId,
+        accountId: accountId,
         date: new Date(),
       });
       setTitle("");
@@ -108,7 +106,7 @@ export default function AddExpenseModal({ open, onClose, accounts }: Props) {
                     type="button"
                     onClick={() => setAccountId(acc.id)}
                     className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-medium transition-all whitespace-nowrap shrink-0 ${
-                      selectedAccountId === acc.id
+                      accountId === acc.id
                         ? "border-violet-500 bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-300 ring-1 ring-violet-500"
                         : "border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600"
                     }`}

@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, getDay } from "date-fns";
-import { Expense, CATEGORIES, INCOME_CATEGORIES } from "@/lib/expenses";
+import { Expense, getCategoryInfo } from "@/lib/expenses";
 import { Account, getAccountTypeInfo } from "@/lib/accounts";
 
 interface Props {
@@ -43,9 +43,9 @@ export default function DetailsTab({ expenses, accounts, onEdit }: Props) {
     return expenses.filter((e) => isSameDay(e.date, selectedDate));
   }, [expenses, selectedDate]);
 
-  const allCategories = [...CATEGORIES, ...INCOME_CATEGORIES];
-  const getCategoryInfo = (name: string) =>
-    allCategories.find((c) => c.name === name) || CATEGORIES[CATEGORIES.length - 1];
+  const monthExpenses = useMemo(() => {
+    return expenses.filter((e) => isSameMonth(e.date, currentMonth));
+  }, [expenses, currentMonth]);
 
   return (
     <div className="space-y-4">
@@ -153,8 +153,10 @@ export default function DetailsTab({ expenses, accounts, onEdit }: Props) {
               return (
                 <div
                   key={expense.id}
+                  tabIndex={onEdit ? 0 : undefined}
+                  role={onEdit ? "button" : undefined}
                   onClick={() => onEdit?.(expense)}
-                  className={`flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-zinc-200 dark:hover:border-zinc-700 transition-colors ${onEdit ? "cursor-pointer active:scale-[0.98] active:bg-zinc-50 dark:active:bg-zinc-800" : ""}`}
+                  className={`flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-zinc-200 dark:hover:border-zinc-700 transition-colors ${onEdit ? "cursor-pointer active:scale-[0.98] active:bg-zinc-50 dark:active:bg-zinc-800 focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none" : ""}`}
                 >
                   <div
                     className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
@@ -202,22 +204,22 @@ export default function DetailsTab({ expenses, accounts, onEdit }: Props) {
           <p className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider px-1">
             All in {format(currentMonth, "MMMM")}
           </p>
-          {expenses.filter((e) => isSameMonth(e.date, currentMonth)).length === 0 ? (
+          {monthExpenses.length === 0 ? (
             <p className="text-sm text-zinc-400 dark:text-zinc-500 text-center py-6">
               No expenses this month
             </p>
           ) : (
-            expenses
-              .filter((e) => isSameMonth(e.date, currentMonth))
-              .map((expense) => {
+            monthExpenses.map((expense) => {
                 const cat = getCategoryInfo(expense.category);
                 const acc = accounts.find((a) => a.id === expense.accountId);
                 const accInfo = acc ? getAccountTypeInfo(acc.type) : null;
                 return (
                   <div
                     key={expense.id}
+                    tabIndex={onEdit ? 0 : undefined}
+                    role={onEdit ? "button" : undefined}
                     onClick={() => onEdit?.(expense)}
-                    className={`flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-zinc-200 dark:hover:border-zinc-700 transition-colors ${onEdit ? "cursor-pointer active:scale-[0.98] active:bg-zinc-50 dark:active:bg-zinc-800" : ""}`}
+                    className={`flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-zinc-200 dark:hover:border-zinc-700 transition-colors ${onEdit ? "cursor-pointer active:scale-[0.98] active:bg-zinc-50 dark:active:bg-zinc-800 focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none" : ""}`}
                   >
                     <div
                       className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"

@@ -42,6 +42,12 @@ export const INCOME_CATEGORIES = [
   { name: "Other", color: "#6b7280", icon: "📦" },
 ];
 
+const ALL_CATEGORIES = [...CATEGORIES, ...INCOME_CATEGORIES];
+
+export function getCategoryInfo(name: string) {
+  return ALL_CATEGORIES.find((c) => c.name === name) || CATEGORIES[CATEGORIES.length - 1];
+}
+
 export async function addExpense(
   userId: string,
   data: { title: string; amount: number; type: TransactionType; category: string; accountId: string; date: Date }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { Expense, subscribeToExpenses } from "@/lib/expenses";
 import { Account, subscribeToAccounts, ensureDefaultAccount, getAccountTypeInfo, deleteAccount } from "@/lib/accounts";
@@ -46,8 +46,8 @@ export default function Dashboard() {
     await updateSettings(user.uid, { [key]: newSettings[key] });
   };
 
-  const incomeEntries = expenses.filter((e) => e.type === "income");
-  const expenseEntries = expenses.filter((e) => e.type !== "income");
+  const incomeEntries = useMemo(() => expenses.filter((e) => e.type === "income"), [expenses]);
+  const expenseEntries = useMemo(() => expenses.filter((e) => e.type !== "income"), [expenses]);
   const hasIncome = incomeEntries.length > 0;
 
   // If current tab was hidden via settings, go home
@@ -185,7 +185,11 @@ export default function Dashboard() {
                       </div>
                       {!acc.isDefault && (
                         <button
-                          onClick={() => deleteAccount(acc.id)}
+                          aria-label={`Delete ${acc.name}`}
+                          onClick={async () => {
+                            try { await deleteAccount(acc.id); }
+                            catch { alert("Failed to delete account. Please try again."); }
+                          }}
                           className="opacity-0 group-hover:opacity-100 text-zinc-300 hover:text-red-500 dark:text-zinc-600 dark:hover:text-red-400 transition-all text-lg leading-none"
                         >
                           &times;
@@ -242,6 +246,7 @@ export default function Dashboard() {
       {/* FAB per screen */}
       {(tab === "home" || tab === "details") && (
         <button
+          aria-label="Add expense"
           onClick={() => setShowAdd(true)}
           className="fixed bottom-20 right-6 sm:right-[calc(50%-14rem)] w-14 h-14 bg-violet-600 hover:bg-violet-700 text-white rounded-2xl shadow-lg shadow-violet-500/30 flex items-center justify-center text-2xl font-light transition-all hover:scale-105 active:scale-95 z-20"
         >
@@ -250,6 +255,7 @@ export default function Dashboard() {
       )}
       {tab === "income" && (
         <button
+          aria-label="Add income"
           onClick={() => setShowAddIncome(true)}
           className="fixed bottom-20 right-6 sm:right-[calc(50%-14rem)] w-14 h-14 bg-green-600 hover:bg-green-700 text-white rounded-2xl shadow-lg shadow-violet-500/30 flex items-center justify-center text-2xl font-light transition-all hover:scale-105 active:scale-95 z-20"
         >
@@ -258,6 +264,7 @@ export default function Dashboard() {
       )}
       {tab === "accounts" && (
         <button
+          aria-label="Add account"
           onClick={() => setShowAddAccount(true)}
           className="fixed bottom-20 right-6 sm:right-[calc(50%-14rem)] w-14 h-14 bg-violet-600 hover:bg-violet-700 text-white rounded-2xl shadow-lg shadow-violet-500/30 flex items-center justify-center text-2xl font-light transition-all hover:scale-105 active:scale-95 z-20"
         >
@@ -266,7 +273,7 @@ export default function Dashboard() {
       )}
 
       {/* Bottom Nav */}
-      <nav className="fixed bottom-0 left-0 right-0 z-10 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-lg border-t border-zinc-100 dark:border-zinc-800">
+      <nav aria-label="Main navigation" className="fixed bottom-0 left-0 right-0 z-10 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-lg border-t border-zinc-100 dark:border-zinc-800">
         <div className="max-w-lg mx-auto flex">
           {/* Home - always visible */}
           <button
