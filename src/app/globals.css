@@ -1,26 +1,146 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes float-orb {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+  25% { transform: translate(30px, -20px) scale(1.15); opacity: 0.4; }
+  50% { transform: translate(-10px, 25px) scale(0.95); opacity: 0.25; }
+  75% { transform: translate(-25px, -10px) scale(1.1); opacity: 0.35; }
+}
+
+@keyframes float-orb-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.25; }
+  25% { transform: translate(-20px, 15px) scale(1.1); opacity: 0.35; }
+  50% { transform: translate(25px, -15px) scale(0.9); opacity: 0.2; }
+  75% { transform: translate(10px, 20px) scale(1.05); opacity: 0.3; }
+}
+
+@keyframes float-orb-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.2; }
+  30% { transform: translate(15px, 20px) scale(1.2); opacity: 0.35; }
+  60% { transform: translate(-20px, -15px) scale(0.85); opacity: 0.15; }
+}
+
+@keyframes pulse-ring {
+  0%, 100% { transform: scale(0.85); opacity: 0.08; }
+  50% { transform: scale(1.05); opacity: 0.15; }
+}
+
+@keyframes pulse-ring-2 {
+  0%, 100% { transform: scale(0.9); opacity: 0.06; }
+  50% { transform: scale(1.1); opacity: 0.12; }
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-2%, -2%); }
+  30% { transform: translate(1%, -1%); }
+  50% { transform: translate(-1%, 2%); }
+  70% { transform: translate(2%, 1%); }
+  90% { transform: translate(-2%, 1%); }
+}
+
+.summary-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.summary-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 40%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.04) 60%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  z-index: 1;
+}
+
+.summary-card::after {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  animation: grain 4s steps(8) infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(50px);
+  pointer-events: none;
+  will-change: transform, opacity;
+  z-index: 0;
+}
+
+.orb-1 {
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, #f0abfc, #c084fc);
+  top: -40px;
+  right: -30px;
+  animation: float-orb 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.orb-2 {
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, #67e8f9, #22d3ee);
+  bottom: -25px;
+  left: -15px;
+  animation: float-orb-2 12s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.orb-3 {
+  width: 70px;
+  height: 70px;
+  background: radial-gradient(circle, #fbbf24, #f59e0b);
+  top: 40%;
+  left: 55%;
+  animation: float-orb-3 14s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.ring-pulse {
+  position: absolute;
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  top: -50px;
+  right: -50px;
+  animation: pulse-ring 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ring-pulse-2 {
+  position: absolute;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  bottom: -35px;
+  left: -35px;
+  animation: pulse-ring-2 7s cubic-bezier(0.4, 0, 0.2, 1) infinite 2s;
+  pointer-events: none;
+  z-index: 0;
 }
