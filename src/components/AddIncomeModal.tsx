@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { INCOME_CATEGORIES, addExpense } from "@/lib/expenses";
 import { Account, getAccountTypeInfo } from "@/lib/accounts";
 import { useAuth } from "@/context/AuthContext";
@@ -19,12 +19,23 @@ export default function AddIncomeModal({ open, onClose, accounts }: Props) {
   const [category, setCategory] = useState(INCOME_CATEGORIES[0].name);
   const [accountId, setAccountId] = useState(defaultAccount?.id || "");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (open && defaultAccount) {
+      setAccountId(defaultAccount.id);
+    }
+  }, [open, defaultAccount]);
 
   if (!open) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !title || !amount || !accountId) return;
+    setError("");
+    if (!title.trim()) { setError("Title is required"); return; }
+    if (!amount || parseFloat(amount) <= 0) { setError("Enter a valid amount"); return; }
+    if (!accountId) { setError("Select an account"); return; }
+    if (!user) return;
 
     setLoading(true);
     try {
@@ -63,6 +74,11 @@ export default function AddIncomeModal({ open, onClose, accounts }: Props) {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {error && (
+            <p role="alert" className="text-sm text-red-500 font-medium bg-red-50 dark:bg-red-500/10 px-3 py-2 rounded-lg">
+              {error}
+            </p>
+          )}
           <div>
             <label className="block text-sm font-medium text-zinc-600 dark:text-zinc-400 mb-1.5">
               Title
